@@ -1,0 +1,45 @@
+name: Export Presentation to PDF
+
+on:
+  workflow_dispatch:
+    inputs:
+      presentation:
+        description: 'Which presentation to export'
+        required: true
+        type: choice
+        options:
+        - azure_fundamentals
+        - github_actions
+
+jobs:
+  export-pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v6
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: '25'
+
+    - name: Install marp-cli
+      run: npm install -g @marp-team/marp-cli
+
+    - name: Export PDF
+      run: |
+        if [[ "${{ github.event.inputs.presentation }}" == "azure_fundamentals" ]]; then
+          marp --pdf --allow-local-files azure_fundamentals/azure_fundamentals_course_Jan_2026.md -o azure_fundamentals.pdf
+        elif [[ "${{ github.event.inputs.presentation }}" == "github_actions" ]]; then
+          marp --pdf --allow-local-files github_actions/github_actions_crash_course_Jan_2026.md -o github_actions.pdf
+        fi
+
+    - name: Upload PDF artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: presentation-pdf
+        path: |
+          azure_fundamentals.pdf
+          github_actions.pdf
+        if-no-files-found: ignore
