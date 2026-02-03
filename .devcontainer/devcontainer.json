@@ -1,0 +1,15 @@
+{
+    "name": "GitHub Codespaces - Marp CLI",
+    "image": "mcr.microsoft.com/devcontainers/universal:latest",
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {}
+    },
+    "postCreateCommand": "npm install -g @marp-team/marp-cli",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "marp-team.marp-vscode"
+            ]
+        }
+    }
+}
